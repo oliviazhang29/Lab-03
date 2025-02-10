@@ -19,16 +19,16 @@ nobel <- read_csv("data/nobel.csv")
 
 ### Exercise 1
 
-Remove this text, and add your answer for Exercise 1 here.
-Add code chunks as needed.
-Don't forget to label your code chunk.
-Do not use spaces in code chunk labels.
+Take a look at the dataset. 
 
 ```{r discriptives}
-nobel
+glimpse(nobel)
 ```
+`r nrow(nobel)` observations and `r ncol(nobel)` variables are in the dataset. Each row represents a noble prize winner. 
 
 ### Exercise 2
+
+Filter out the living noble prize winner:
 
 ```{r nobel-living}
 nobel_living <- filter(nobel, is.na(died_date),
@@ -36,6 +36,10 @@ nobel_living <- filter(nobel, is.na(died_date),
                        gender != "org")
 nobel_living
 ```
+Now we are left of only `r nrow(nobel_living)` observations. 
+
+
+Create a new variable country_us (laureates won the prize in US):
 
 ```{r create-country-us}
 nobel_living <- nobel_living %>%
@@ -44,12 +48,16 @@ nobel_living <- nobel_living %>%
   )
 ```
 
+Filter out the four categories (Physics, Physics, Physics, Economics):
+
 ```{r nobel-living-science}
 nobel_living_science <- nobel_living %>%
-  filter(category %in% c("Physics", "Medicine", "Chemistry", "Economics"))
+  filter(category %in% c("Physics", "Physics", "Physics", "Economics"))
 ```
 
 ### Exercise 3
+
+Create a bar plot of US and Other laureates for the four categories:
 
 ```{r bar-plot}
 ggplot(nobel_living_science, aes(x =country_us)) +
@@ -61,6 +69,8 @@ ggplot(nobel_living_science, aes(x =country_us)) +
 From the bar plot, you can see that across all categories, there are more laureates from the USA than from the sum of all other countries, which means that USA is the main country for noble laureates. 
 
 ### Exercise 4
+
+Create a new variable born_country to categorize the laureates into US born or Other born. 
 
 ```{r create-born-country-us}
 nobel_living_science <- nobel_living_science %>%
@@ -76,6 +86,8 @@ nobel_living_science %>%
 
 ### Exercise 5
 
+Create a bar plot depicting the born countries of the US and Other laureates.
+
 ```{r bar-plot-2}
 ggplot(nobel_living_science, aes(x = country_us, 
                                  fill = born_country_us)) +
@@ -87,6 +99,8 @@ ggplot(nobel_living_science, aes(x = country_us,
 The graph supports Buzzfeed’s claim that a substantial number of the US noble prize winners are immigrants. However, there are also a bunch of US born winners, especially for the economics. 
 
 ### Exercise 6
+
+Take a look at the born countries of the Other laureates. 
 
 ```{r other-born-us-winners}
 nobel_living_science %>%

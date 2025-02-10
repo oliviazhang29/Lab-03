@@ -17,36 +17,47 @@ nobel <- read_csv("data/nobel.csv")
 
 ### Exercise 1
 
-Remove this text, and add your answer for Exercise 1 here. Add code
-chunks as needed. Don’t forget to label your code chunk. Do not use
-spaces in code chunk labels.
+Take a look at the dataset.
 
 ``` r
-nobel
+glimpse(nobel)
 ```
 
-    ## # A tibble: 935 × 26
-    ##       id firstname   surname  year category affiliation city  country born_date 
-    ##    <dbl> <chr>       <chr>   <dbl> <chr>    <chr>       <chr> <chr>   <date>    
-    ##  1     1 Wilhelm Co… Röntgen  1901 Physics  Munich Uni… Muni… Germany 1845-03-27
-    ##  2     2 Hendrik A.  Lorentz  1902 Physics  Leiden Uni… Leid… Nether… 1853-07-18
-    ##  3     3 Pieter      Zeeman   1902 Physics  Amsterdam … Amst… Nether… 1865-05-25
-    ##  4     4 Henri       Becque…  1903 Physics  École Poly… Paris France  1852-12-15
-    ##  5     5 Pierre      Curie    1903 Physics  École muni… Paris France  1859-05-15
-    ##  6     6 Marie       Curie    1903 Physics  <NA>        <NA>  <NA>    1867-11-07
-    ##  7     6 Marie       Curie    1911 Chemist… Sorbonne U… Paris France  1867-11-07
-    ##  8     8 Lord        Raylei…  1904 Physics  Royal Inst… Lond… United… 1842-11-12
-    ##  9     9 Philipp     Lenard   1905 Physics  Kiel Unive… Kiel  Germany 1862-06-07
-    ## 10    10 J.J.        Thomson  1906 Physics  University… Camb… United… 1856-12-18
-    ## # ℹ 925 more rows
-    ## # ℹ 17 more variables: died_date <date>, gender <chr>, born_city <chr>,
-    ## #   born_country <chr>, born_country_code <chr>, died_city <chr>,
-    ## #   died_country <chr>, died_country_code <chr>, overall_motivation <chr>,
-    ## #   share <dbl>, motivation <chr>, born_country_original <chr>,
-    ## #   born_city_original <chr>, died_country_original <chr>,
-    ## #   died_city_original <chr>, city_original <chr>, country_original <chr>
+    ## Rows: 935
+    ## Columns: 26
+    ## $ id                    <dbl> 1, 2, 3, 4, 5, 6, 6, 8, 9, 10, 11, 12, 13, 14, 1…
+    ## $ firstname             <chr> "Wilhelm Conrad", "Hendrik A.", "Pieter", "Henri…
+    ## $ surname               <chr> "Röntgen", "Lorentz", "Zeeman", "Becquerel", "Cu…
+    ## $ year                  <dbl> 1901, 1902, 1902, 1903, 1903, 1903, 1911, 1904, …
+    ## $ category              <chr> "Physics", "Physics", "Physics", "Physics", "Phy…
+    ## $ affiliation           <chr> "Munich University", "Leiden University", "Amste…
+    ## $ city                  <chr> "Munich", "Leiden", "Amsterdam", "Paris", "Paris…
+    ## $ country               <chr> "Germany", "Netherlands", "Netherlands", "France…
+    ## $ born_date             <date> 1845-03-27, 1853-07-18, 1865-05-25, 1852-12-15,…
+    ## $ died_date             <date> 1923-02-10, 1928-02-04, 1943-10-09, 1908-08-25,…
+    ## $ gender                <chr> "male", "male", "male", "male", "male", "female"…
+    ## $ born_city             <chr> "Remscheid", "Arnhem", "Zonnemaire", "Paris", "P…
+    ## $ born_country          <chr> "Germany", "Netherlands", "Netherlands", "France…
+    ## $ born_country_code     <chr> "DE", "NL", "NL", "FR", "FR", "PL", "PL", "GB", …
+    ## $ died_city             <chr> "Munich", NA, "Amsterdam", NA, "Paris", "Sallanc…
+    ## $ died_country          <chr> "Germany", "Netherlands", "Netherlands", "France…
+    ## $ died_country_code     <chr> "DE", "NL", "NL", "FR", "FR", "FR", "FR", "GB", …
+    ## $ overall_motivation    <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …
+    ## $ share                 <dbl> 1, 2, 2, 2, 4, 4, 1, 1, 1, 1, 1, 1, 2, 2, 1, 1, …
+    ## $ motivation            <chr> "\"in recognition of the extraordinary services …
+    ## $ born_country_original <chr> "Prussia (now Germany)", "the Netherlands", "the…
+    ## $ born_city_original    <chr> "Lennep (now Remscheid)", "Arnhem", "Zonnemaire"…
+    ## $ died_country_original <chr> "Germany", "the Netherlands", "the Netherlands",…
+    ## $ died_city_original    <chr> "Munich", NA, "Amsterdam", NA, "Paris", "Sallanc…
+    ## $ city_original         <chr> "Munich", "Leiden", "Amsterdam", "Paris", "Paris…
+    ## $ country_original      <chr> "Germany", "the Netherlands", "the Netherlands",…
+
+935 observations and 26 variables are in the dataset. Each row
+represents a noble prize winner.
 
 ### Exercise 2
+
+Filter out the living noble prize winner:
 
 ``` r
 nobel_living <- filter(nobel, is.na(died_date),
@@ -76,6 +87,10 @@ nobel_living
     ## #   born_city_original <chr>, died_country_original <chr>,
     ## #   died_city_original <chr>, city_original <chr>, country_original <chr>
 
+Now we are left of only 228 observations.
+
+Create a new variable country_us (laureates won the prize in US):
+
 ``` r
 nobel_living <- nobel_living %>%
   mutate(
@@ -83,12 +98,16 @@ nobel_living <- nobel_living %>%
   )
 ```
 
+Filter out the four categories (Physics, Physics, Physics, Economics):
+
 ``` r
 nobel_living_science <- nobel_living %>%
-  filter(category %in% c("Physics", "Medicine", "Chemistry", "Economics"))
+  filter(category %in% c("Physics", "Physics", "Physics", "Economics"))
 ```
 
 ### Exercise 3
+
+Create a bar plot of US and Other laureates for the four categories:
 
 ``` r
 ggplot(nobel_living_science, aes(x =country_us)) +
@@ -105,6 +124,9 @@ which means that USA is the main country for noble laureates.
 
 ### Exercise 4
 
+Create a new variable born_country to categorize the laureates into US
+born or Other born.
+
 ``` r
 nobel_living_science <- nobel_living_science %>%
   mutate(
@@ -116,11 +138,14 @@ nobel_living_science %>%
   nrow()
 ```
 
-    ## [1] 105
+    ## [1] 57
 
 105 of the winners were born in the US.
 
 ### Exercise 5
+
+Create a bar plot depicting the born countries of the US and Other
+laureates.
 
 ``` r
 ggplot(nobel_living_science, aes(x = country_us, 
@@ -138,4 +163,27 @@ US born winners, especially for the economics.
 
 ### Exercise 6
 
-…
+Take a look at the born countries of the Other laureates.
+
+``` r
+nobel_living_science %>%
+  filter(country_us == "USA", born_country_us == "Other") %>%
+  count(born_country) %>%
+  arrange(desc(n))
+```
+
+    ## # A tibble: 9 × 2
+    ##   born_country       n
+    ##   <chr>          <int>
+    ## 1 Germany            4
+    ## 2 United Kingdom     4
+    ## 3 China              3
+    ## 4 Canada             2
+    ## 5 Japan              2
+    ## 6 Norway             2
+    ## 7 Finland            1
+    ## 8 Israel             1
+    ## 9 Scotland           1
+
+Germany is the most common born country for US immgirant noble prize
+winner, not a surprise given the Nazi situation.
