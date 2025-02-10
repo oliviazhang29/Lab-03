@@ -87,7 +87,7 @@ nobel_living
     ## #   born_city_original <chr>, died_country_original <chr>,
     ## #   died_city_original <chr>, city_original <chr>, country_original <chr>
 
-Now we are left of only 228 observations.
+Now we are left with only 228 observations.
 
 Create a new variable country_us (laureates won the prize in US):
 
@@ -98,11 +98,12 @@ nobel_living <- nobel_living %>%
   )
 ```
 
-Filter out the four categories (Physics, Physics, Physics, Economics):
+Filter out the four categories (Physics, Medicine, Chemistry,
+Economics):
 
 ``` r
 nobel_living_science <- nobel_living %>%
-  filter(category %in% c("Physics", "Physics", "Physics", "Economics"))
+  filter(category %in% c("Physics", "Medicine", "Chemistry", "Economics"))
 ```
 
 ### Exercise 3
@@ -133,12 +134,10 @@ nobel_living_science <- nobel_living_science %>%
     born_country_us = if_else(born_country == "USA", "USA", "Other")
   )
 
-nobel_living_science %>%
+us_born_winners <- nobel_living_science %>%
   filter(born_country_us == "USA") %>%
   nrow()
 ```
-
-    ## [1] 57
 
 105 of the winners were born in the US.
 
@@ -172,18 +171,20 @@ nobel_living_science %>%
   arrange(desc(n))
 ```
 
-    ## # A tibble: 9 × 2
-    ##   born_country       n
-    ##   <chr>          <int>
-    ## 1 Germany            4
-    ## 2 United Kingdom     4
-    ## 3 China              3
-    ## 4 Canada             2
-    ## 5 Japan              2
-    ## 6 Norway             2
-    ## 7 Finland            1
-    ## 8 Israel             1
-    ## 9 Scotland           1
+    ## # A tibble: 21 × 2
+    ##    born_country       n
+    ##    <chr>          <int>
+    ##  1 Germany            7
+    ##  2 United Kingdom     7
+    ##  3 China              5
+    ##  4 Canada             4
+    ##  5 Japan              3
+    ##  6 Australia          2
+    ##  7 Israel             2
+    ##  8 Norway             2
+    ##  9 Austria            1
+    ## 10 Finland            1
+    ## # ℹ 11 more rows
 
 Germany is the most common born country for US immgirant noble prize
 winner, not a surprise given the Nazi situation.

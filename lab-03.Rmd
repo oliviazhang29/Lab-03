@@ -36,7 +36,7 @@ nobel_living <- filter(nobel, is.na(died_date),
                        gender != "org")
 nobel_living
 ```
-Now we are left of only `r nrow(nobel_living)` observations. 
+Now we are left with only `r nrow(nobel_living)` observations. 
 
 
 Create a new variable country_us (laureates won the prize in US):
@@ -48,11 +48,11 @@ nobel_living <- nobel_living %>%
   )
 ```
 
-Filter out the four categories (Physics, Physics, Physics, Economics):
+Filter out the four categories (Physics, Medicine, Chemistry, Economics):
 
 ```{r nobel-living-science}
 nobel_living_science <- nobel_living %>%
-  filter(category %in% c("Physics", "Physics", "Physics", "Economics"))
+  filter(category %in% c("Physics", "Medicine", "Chemistry", "Economics"))
 ```
 
 ### Exercise 3
@@ -78,11 +78,11 @@ nobel_living_science <- nobel_living_science %>%
     born_country_us = if_else(born_country == "USA", "USA", "Other")
   )
 
-nobel_living_science %>%
+us_born_winners <- nobel_living_science %>%
   filter(born_country_us == "USA") %>%
   nrow()
 ```
-105 of the winners were born in the US.
+`r us_born_winners` of the winners were born in the US.
 
 ### Exercise 5
 
