@@ -24,28 +24,74 @@ Add code chunks as needed.
 Don't forget to label your code chunk.
 Do not use spaces in code chunk labels.
 
+```{r discriptives}
+nobel
+```
+
 ### Exercise 2
 
-Remove this text, and add your answer for Exercise 1 here.
-Add code chunks as needed.
-Don't forget to label your code chunk.
-Do not use spaces in code chunk labels.
+```{r nobel-living}
+nobel_living <- filter(nobel, is.na(died_date),
+                       !is.na(country),
+                       gender != "org")
+nobel_living
+```
+
+```{r create-country-us}
+nobel_living <- nobel_living %>%
+  mutate(
+    country_us = if_else(country == "USA", "USA", "Other")
+  )
+```
+
+```{r nobel-living-science}
+nobel_living_science <- nobel_living %>%
+  filter(category %in% c("Physics", "Medicine", "Chemistry", "Economics"))
+```
 
 ### Exercise 3
 
-Remove this text, and add your answer for Exercise 1 here.
-Add code chunks as needed.
-Don't forget to label your code chunk.
-Do not use spaces in code chunk labels.
+```{r bar-plot}
+ggplot(nobel_living_science, aes(x =country_us)) +
+  geom_bar() +
+  facet_wrap(~ category, ncol = 2) +
+  coord_flip()
+```
+
+From the bar plot, you can see that across all categories, there are more laureates from the USA than from the sum of all other countries, which means that USA is the main country for noble laureates. 
 
 ### Exercise 4
 
-...
+```{r create-born-country-us}
+nobel_living_science <- nobel_living_science %>%
+  mutate(
+    born_country_us = if_else(born_country == "USA", "USA", "Other")
+  )
+
+nobel_living_science %>%
+  filter(born_country_us == "USA") %>%
+  nrow()
+```
+105 of the winners were born in the US.
 
 ### Exercise 5
 
-...
+```{r bar-plot-2}
+ggplot(nobel_living_science, aes(x = country_us, 
+                                 fill = born_country_us)) +
+  geom_bar() +
+  facet_wrap(~ category, ncol = 2) +
+  coord_flip()
+```
+
+The graph supports Buzzfeed’s claim that a substantial number of the US noble prize winners are immigrants. However, there are also a bunch of US born winners, especially for the economics. 
 
 ### Exercise 6
 
-...
+```{r other-born-us-winners}
+nobel_living_science %>%
+  filter(country_us == "USA", born_country_us == "Other") %>%
+  count(born_country) %>%
+  arrange(desc(n))
+```
+Germany is the most common born country for US immgirant noble prize winner, not a surprise given the Nazi situation. 
